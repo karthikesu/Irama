@@ -160,17 +160,34 @@
 
         <h1>Cafeteria Feedback System</h1>
         <p class="subtitle">Choose your access point</p>
+<div class="button-grid">
+    <a href="feedback.html" class="nav-button">
+        <div class="icon">🖥️</div>
+        <div class="text">
+            <div class="title">Tablet Kiosk</div>
+            <div class="desc">Customer feedback collection interface</div>
+        </div>
+    </a>
 
-        <div class="button-grid">
-            <a href="cafeteria-feedback.html" class="nav-button">
-                <div class="icon">🖥️</div>
-                <div class="text">
-                    <div class="title">Tablet Kiosk</div>
-                    <div class="desc">Customer feedback collection interface</div>
-                </div>
-            </a>
+    <a href="dashboard.html" class="nav-button">
+        <div class="icon">📊</div>
+        <div class="text">
+            <div class="title">Dashboard</div>
+            <div class="desc">Analytics, reports, and data export</div>
+        </div>
+    </a>
 
-            <a href="cafeteria-dashboard.html" class="nav-button">
+    <a href="qr-share.html" class="nav-button">
+        <div class="icon">📱</div>
+        <div class="text">
+            <div class="title">QR Codes</div>
+            <div class="desc">Share access with GM, IT, and HMs</div>
+        </div>
+    </a>
+</div>
+       
+
+            <a href="feedback.html" class="nav-button">
                 <div class="icon">📊</div>
                 <div class="text">
                     <div class="title">Dashboard</div>
@@ -208,9 +225,10 @@
 
         // Add keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            if (e.key === '1') window.location.href = 'cafeteria-feedback.html';
-            if (e.key === '2') window.location.href = 'cafeteria-dashboard.html';
-            if (e.key === '3') window.location.href = 'qr-share.html';
+          
+      if (e.key === '1') window.location.href = 'feedback.html';
+      if (e.key === '2') window.location.href = 'dashboard.html';
+      if (e.key === '3') window.location.href = 'qr-share.html';
         });
     </script>
 </body>
