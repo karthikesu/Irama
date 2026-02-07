@@ -323,9 +323,36 @@
             font-size: 48px;
             margin-bottom: 15px;
         }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: none;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: #f7fafc;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
+    <a href="index.html" class="back-button">← Home</a>
+
     <div class="dashboard-header">
         <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" style="height: 50px;">
@@ -480,6 +507,11 @@
         let filteredData = [];
         let charts = {}; 
 
+        // Initialize Supabase
+        const supabaseUrl = 'https://czkpqezqiusexllxwyuw.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6a3BxZXpxaXVzZXhsbHh3eXV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNjM2ODEsImV4cCI6MjA4NTgzOTY4MX0.DQYOB9t73E00U2Y8DVG7j-zbfXyEH7Ew4J3Dk1b2EFI';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
         // Initialize
         async function init() {
             await loadData();
@@ -487,7 +519,7 @@
         }
 
         // Load data from storage
-      async function loadData() {
+        async function loadData() {
             try {
                 // Fetch all feedback from your Supabase table
                 const { data, error } = await _supabase
@@ -704,8 +736,8 @@
             days.forEach(day => dayData[day] = []);
             
             filteredData.forEach(item => {
-                if (dayData[item.dayOfWeek]) {
-                    dayData[item.dayOfWeek].push(item.rating);
+                if (dayData[item.dayofweek]) {
+                    dayData[item.dayofweek].push(item.rating);
                 }
             });
 
@@ -788,7 +820,7 @@
                 return;
             }
 
-            const recentData = filteredData.slice(-50).reverse();
+            const recentData = filteredData.slice(0, 50);
             
             const emojiMap = {
                 1: '😡',
@@ -817,8 +849,8 @@
                 tableHTML += `
                     <tr>
                         <td>${item.date}</td>
-                        <td>${item.time}</td>
-                        <td>${item.dayOfWeek}</td>
+                        <td>${item.time || 'N/A'}</td>
+                        <td>${item.dayofweek}</td>
                         <td class="emoji-display">${emojiMap[item.rating]}</td>
                         <td>${item.label}</td>
                         <td>${item.location}</td>
@@ -891,7 +923,7 @@ Note: This is an automated report from the Cafeteria Feedback System.
             let csv = 'Date,Time,Day of Week,Rating,Feedback,Location\n';
             
             filteredData.forEach(item => {
-                csv += `${item.date},${item.time},${item.dayOfWeek},${item.rating},${item.label},${item.location}\n`;
+                csv += `${item.date},${item.time || 'N/A'},${item.dayofweek},${item.rating},${item.label},${item.location}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -910,7 +942,7 @@ Note: This is an automated report from the Cafeteria Feedback System.
                 return;
             }
 
-                try {
+            try {
                 // Delete all rows from Supabase 'feedback' table
                 const { error } = await _supabase
                     .from('feedback')
@@ -940,15 +972,8 @@ Note: This is an automated report from the Cafeteria Feedback System.
             }, 5000);
         }
 
-        // Initialize on load
-      // Initialize Supabase
-        const supabaseUrl = 'https://czkpqezqiusexllxwyuw.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6a3BxZXpxaXVzZXhsbHh3eXV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNjM2ODEsImV4cCI6MjA4NTgzOTY4MX0.DQYOB9t73E00U2Y8DVG7j-zbfXyEH7Ew4J3Dk1b2EFI';
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
         // Run the initialization
         init(); 
-
 
         // Auto-refresh every 30 seconds
         setInterval(async () => {
