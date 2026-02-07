@@ -180,10 +180,33 @@
         .admin-button:hover {
             background: rgba(255,255,255,0.3);
         }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+    <a href="index.html" class="back-button">← Back</a>
     <button class="admin-button" onclick="openDashboard()">📊 Dashboard</button>
 
     <div class="container">
@@ -250,22 +273,22 @@
     </div>
 
     <script>
-    // Paste it here
-    const supabaseUrl = 'https://czkpqezqiusexllxwyuw.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6a3BxZXpxaXVzZXhsbHh3eXV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNjM2ODEsImV4cCI6MjA4NTgzOTY4MX0.DQYOB9t73E00U2Y8DVG7j-zbfXyEH7Ew4J3Dk1b2EFI';
-    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-
+        // Initialize Supabase
+        const supabaseUrl = 'https://czkpqezqiusexllxwyuw.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6a3BxZXpxaXVzZXhsbHh3eXV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNjM2ODEsImV4cCI6MjA4NTgzOTY4MX0.DQYOB9t73E00U2Y8DVG7j-zbfXyEH7Ew4J3Dk1b2EFI';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Submit feedback directly to Supabase Cloud
         async function submitFeedback(rating, label) {
+            const now = new Date();
             const feedbackEntry = {
                 rating: rating,
                 label: label,
                 location: 'Main Cafeteria',
-                dayofweek: new Date().toLocaleDateString('en-MY', { weekday: 'long' }),
-                date: new Date().toLocaleDateString('en-MY'),
-                timestamp: new Date().toISOString()
+                dayofweek: now.toLocaleDateString('en-MY', { weekday: 'long' }),
+                date: now.toLocaleDateString('en-MY'),
+                time: now.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' }),
+                timestamp: now.toISOString()
             };
 
             try {
@@ -291,7 +314,7 @@
 
             } catch (error) {
                 console.error('Cloud Save Error:', error);
-                alert('Rangkaian bermasalah. Sila beritahu IT.');
+                alert('Network error. Please notify IT department.\n\nRangkaian bermasalah. Sila beritahu IT.');
             }
         }
 
@@ -316,7 +339,7 @@
 
         // Open dashboard
         function openDashboard() {
-            window.open('cafeteria-dashboard.html', '_blank');
+            window.open('dashboard.html', '_blank');
         }
 
         // Initialize
