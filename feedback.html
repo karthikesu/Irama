@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafeteria Feedback Kiosk</title>
+    <title>Cafeteria Feedback - Irama Kuala Lumpur</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -22,39 +22,49 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
         }
 
         .back-button {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border: none;
             padding: 12px 24px;
             border-radius: 10px;
             font-size: 1em;
             font-weight: 600;
-            color: #667eea;
+            color: #1a1a2e;
             cursor: pointer;
             margin-bottom: 20px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: all 0.3s;
         }
 
         .back-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            background: #f7fafc;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            background: white;
         }
 
         .feedback-card {
             background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.4);
             text-align: center;
+        }
+
+        .logo-section {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 180px;
+            height: auto;
+            margin-bottom: 15px;
         }
 
         .header {
@@ -62,14 +72,16 @@
         }
 
         .header h1 {
-            color: #667eea;
+            color: #1a1a2e;
             font-size: 2.5em;
             margin-bottom: 10px;
+            font-weight: 700;
         }
 
         .header p {
             color: #666;
-            font-size: 1.2em;
+            font-size: 1.3em;
+            font-weight: 500;
         }
 
         .emoji-section {
@@ -78,55 +90,82 @@
 
         .emoji-section h2 {
             color: #333;
-            margin-bottom: 25px;
-            font-size: 1.5em;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            font-weight: 600;
         }
 
         .emoji-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
         .emoji-btn {
-            background: #f7fafc;
-            border: 3px solid transparent;
-            border-radius: 15px;
-            padding: 20px;
-            font-size: 3.5em;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 4px solid transparent;
+            border-radius: 20px;
+            padding: 25px 20px;
+            font-size: 4.5em;
             cursor: pointer;
             transition: all 0.3s;
-            min-width: 100px;
+            min-width: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
         .emoji-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: scale(1.15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
 
         .emoji-btn.selected {
-            border-color: #667eea;
-            background: #e6e9ff;
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
-        .emoji-btn.excellent:hover, .emoji-btn.excellent.selected { border-color: #38b2ac; background: #b2f5ea; }
-        .emoji-btn.good:hover, .emoji-btn.good.selected { border-color: #48bb78; background: #c6f6d5; }
-        .emoji-btn.average:hover, .emoji-btn.average.selected { border-color: #ecc94b; background: #fefcbf; }
-        .emoji-btn.poor:hover, .emoji-btn.poor.selected { border-color: #ed8936; background: #feebc8; }
-        .emoji-btn.very-poor:hover, .emoji-btn.very-poor.selected { border-color: #f56565; background: #fed7d7; }
+        .emoji-btn.excellent:hover, .emoji-btn.excellent.selected { 
+            border-color: #38b2ac; 
+            background: linear-gradient(135deg, #b2f5ea 0%, #81e6d9 100%);
+            box-shadow: 0 15px 40px rgba(56, 178, 172, 0.4);
+        }
+        
+        .emoji-btn.good:hover, .emoji-btn.good.selected { 
+            border-color: #48bb78; 
+            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+            box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4);
+        }
+        
+        .emoji-btn.average:hover, .emoji-btn.average.selected { 
+            border-color: #ecc94b; 
+            background: linear-gradient(135deg, #fefcbf 0%, #faf089 100%);
+            box-shadow: 0 15px 40px rgba(236, 201, 75, 0.4);
+        }
+        
+        .emoji-btn.poor:hover, .emoji-btn.poor.selected { 
+            border-color: #ed8936; 
+            background: linear-gradient(135deg, #feebc8 0%, #fbd38d 100%);
+            box-shadow: 0 15px 40px rgba(237, 137, 54, 0.4);
+        }
+        
+        .emoji-btn.very-poor:hover, .emoji-btn.very-poor.selected { 
+            border-color: #f56565; 
+            background: linear-gradient(135deg, #fed7d7 0%, #fc8181 100%);
+            box-shadow: 0 15px 40px rgba(245, 101, 101, 0.4);
+        }
 
         .emoji-label {
-            display: block;
-            font-size: 0.4em;
-            color: #666;
-            margin-top: 5px;
-            font-weight: 600;
+            font-size: 0.3em;
+            color: #333;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .comment-section {
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             text-align: left;
         }
 
@@ -134,30 +173,30 @@
             display: block;
             color: #333;
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            margin-bottom: 12px;
+            font-size: 1.2em;
         }
 
         .comment-section textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
+            padding: 18px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1em;
             font-family: inherit;
             resize: vertical;
-            min-height: 120px;
+            min-height: 130px;
             transition: all 0.3s;
         }
 
         .comment-section textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #c8a165;
+            box-shadow: 0 0 0 4px rgba(200, 161, 101, 0.1);
         }
 
         .location-section {
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             text-align: left;
         }
 
@@ -165,56 +204,61 @@
             display: block;
             color: #333;
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            margin-bottom: 12px;
+            font-size: 1.2em;
         }
 
         .location-section select {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
+            padding: 18px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1em;
             font-family: inherit;
             background: white;
             transition: all 0.3s;
+            cursor: pointer;
         }
 
         .location-section select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #c8a165;
+            box-shadow: 0 0 0 4px rgba(200, 161, 101, 0.1);
         }
 
         .submit-btn {
-            background: #667eea;
+            background: linear-gradient(135deg, #c8a165 0%, #a67c52 100%);
             color: white;
             border: none;
-            padding: 18px 60px;
-            border-radius: 12px;
-            font-size: 1.3em;
-            font-weight: 600;
+            padding: 22px 70px;
+            border-radius: 15px;
+            font-size: 1.4em;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(200, 161, 101, 0.4);
         }
 
         .submit-btn:hover:not(:disabled) {
-            background: #5568d3;
+            background: linear-gradient(135deg, #a67c52 0%, #8b6843 100%);
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 40px rgba(200, 161, 101, 0.5);
         }
 
         .submit-btn:disabled {
             background: #cbd5e0;
             cursor: not-allowed;
+            box-shadow: none;
         }
 
         .thank-you {
             display: none;
             text-align: center;
-            padding: 40px;
+            padding: 50px 20px;
         }
 
         .thank-you.show {
@@ -222,8 +266,8 @@
         }
 
         .thank-you-icon {
-            font-size: 6em;
-            margin-bottom: 20px;
+            font-size: 7em;
+            margin-bottom: 25px;
             animation: bounce 1s;
         }
 
@@ -235,51 +279,62 @@
 
         .thank-you h2 {
             color: #48bb78;
-            font-size: 2.5em;
-            margin-bottom: 15px;
+            font-size: 3em;
+            margin-bottom: 20px;
+            font-weight: 700;
         }
 
         .thank-you p {
             color: #666;
-            font-size: 1.3em;
-            margin-bottom: 30px;
+            font-size: 1.5em;
+            margin-bottom: 35px;
         }
 
         .new-feedback-btn {
-            background: #667eea;
+            background: linear-gradient(135deg, #c8a165 0%, #a67c52 100%);
             color: white;
             border: none;
-            padding: 15px 40px;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600;
+            padding: 18px 50px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .new-feedback-btn:hover {
-            background: #5568d3;
+            background: linear-gradient(135deg, #a67c52 0%, #8b6843 100%);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(200, 161, 101, 0.4);
         }
 
         .error-message {
             display: none;
             background: #fed7d7;
             color: #c53030;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
             font-weight: 600;
+            font-size: 1.1em;
         }
 
         .error-message.show {
             display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
         }
 
         @media (max-width: 768px) {
             .feedback-card {
-                padding: 30px 20px;
+                padding: 40px 25px;
             }
 
             .header h1 {
@@ -287,9 +342,13 @@
             }
 
             .emoji-btn {
-                font-size: 2.5em;
-                min-width: 70px;
-                padding: 15px;
+                font-size: 3em;
+                min-width: 90px;
+                padding: 20px 15px;
+            }
+
+            .logo {
+                width: 140px;
             }
         }
     </style>
@@ -302,13 +361,17 @@
 
         <div class="feedback-card">
             <div id="feedbackForm">
+                <div class="logo-section">
+                    <img src="download_irama_logo.jpeg" alt="Irama Kuala Lumpur" class="logo">
+                </div>
+
                 <div class="header">
                     <h1>🍽️ Cafeteria Feedback</h1>
-                    <p>We value your opinion! Please share your experience.</p>
+                    <p>We value your opinion!</p>
                 </div>
 
                 <div class="error-message" id="errorMessage">
-                    Please select a rating before submitting!
+                    ⚠️ Please select a rating before submitting!
                 </div>
 
                 <div class="emoji-section">
@@ -360,11 +423,14 @@
             </div>
 
             <div class="thank-you" id="thankYou">
+                <div class="logo-section">
+                    <img src="download_irama_logo.jpeg" alt="Irama Kuala Lumpur" class="logo">
+                </div>
                 <div class="thank-you-icon">✅</div>
                 <h2>Thank You!</h2>
                 <p>Your feedback has been submitted successfully.</p>
                 <button class="new-feedback-btn" onclick="resetForm()">
-                    Submit Another Feedback
+                    New Feedback
                 </button>
             </div>
         </div>
@@ -406,14 +472,12 @@
                 location: location
             };
 
-            // Here you would normally send the feedback to your server
-            // For now, we'll just log it and show the thank you message
-            console.log('Feedback submitted:', feedback);
-
-            // You can also save to localStorage to view later
+            // Save to localStorage
             let allFeedback = JSON.parse(localStorage.getItem('cafeteriaFeedback') || '[]');
             allFeedback.unshift(feedback);
             localStorage.setItem('cafeteriaFeedback', JSON.stringify(allFeedback));
+
+            console.log('Feedback submitted:', feedback);
 
             // Show thank you message
             document.getElementById('feedbackForm').style.display = 'none';
