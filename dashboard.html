@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cafeteria Feedback Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -15,138 +13,100 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
         }
 
-        .dashboard-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
             padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .dashboard-header h1 {
-            font-size: 32px;
+        .header h1 {
+            color: #667eea;
+            font-size: 2.2em;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-left: 5px solid #667eea;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #718096;
-            margin-bottom: 10px;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: bold;
-            color: #2d3748;
-        }
-
-        .data-table {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow-x: auto;
-            margin-bottom: 30px;
-        }
-
-        .data-table h3 {
-            margin-bottom: 20px;
-            color: #2d3748;
-            font-size: 18px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #f7fafc;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #4a5568;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
-            color: #2d3748;
-        }
-
-        tr:hover {
-            background: #f7fafc;
-        }
-
-        .emoji-display {
-            font-size: 24px;
-        }
-
-        .comment-cell {
-            max-width: 300px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-        }
-
-        .comment-cell:hover {
-            white-space: normal;
-            overflow: visible;
-        }
-
-        .comment-badge {
-            background: #ffc107;
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
+        .header p {
+            color: #666;
+            font-size: 1.1em;
         }
 
         .controls {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            align-items: end;
         }
 
         .control-group {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .btn {
-            padding: 10px 25px;
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
-            cursor: pointer;
+            font-size: 1em;
             font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .btn-success {
@@ -156,182 +116,578 @@
 
         .btn-success:hover {
             background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
         }
 
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
             background: white;
-            border: none;
-            color: #667eea;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-card.total { border-left: 4px solid #667eea; }
+        .stat-card.comments { border-left: 4px solid #48bb78; }
+        .stat-card.very-poor { border-left: 4px solid #f56565; }
+        .stat-card.poor { border-left: 4px solid #ed8936; }
+        .stat-card.average { border-left: 4px solid #ecc94b; }
+        .stat-card.good { border-left: 4px solid #48bb78; }
+        .stat-card.excellent { border-left: 4px solid #38b2ac; }
+
+        .analytics-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .analytics-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+
+        .feedback-table {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .feedback-table h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f7fafc;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
             font-weight: 600;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-decoration: none;
-            z-index: 1000;
+            color: #333;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #555;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        .rating-emoji {
+            font-size: 1.5em;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-very-poor { background: #fed7d7; color: #c53030; }
+        .badge-poor { background: #feebc8; color: #c05621; }
+        .badge-average { background: #fefcbf; color: #975a16; }
+        .badge-good { background: #c6f6d5; color: #22543d; }
+        .badge-excellent { background: #b2f5ea; color: #234e52; }
+
+        .no-comment {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .distribution-bar {
+            display: flex;
+            height: 30px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .distribution-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85em;
+            transition: all 0.3s;
+        }
+
+        .distribution-segment:hover {
+            filter: brightness(1.1);
+        }
+
+        .segment-excellent { background: #38b2ac; }
+        .segment-good { background: #48bb78; }
+        .segment-average { background: #ecc94b; }
+        .segment-poor { background: #ed8936; }
+        .segment-very-poor { background: #f56565; }
+
+        .real-time-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #c6f6d5;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #22543d;
+            font-weight: 600;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            background: #48bb78;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .trend-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .trend-up { color: #48bb78; }
+        .trend-down { color: #f56565; }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .controls {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-button">← Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>
+                📊 Cafeteria Feedback Dashboard
+                <span class="real-time-indicator">
+                    <span class="pulse"></span>
+                    Live Analytics
+                </span>
+            </h1>
+            <p>Real-time feedback analytics with customer comments</p>
+        </div>
 
-    <div class="dashboard-header">
-        <h1>📊 Cafeteria Feedback Dashboard</h1>
-        <p>Real-time feedback analytics with customer comments</p>
-    </div>
+        <div class="controls">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label>From Date</label>
+                    <input type="date" id="fromDate" />
+                </div>
+                <div class="control-group">
+                    <label>To Date</label>
+                    <input type="date" id="toDate" />
+                </div>
+                <div class="control-group">
+                    <label>Location</label>
+                    <select id="locationFilter">
+                        <option value="all">All Locations</option>
+                        <option value="Main Cafeteria">Main Cafeteria</option>
+                        <option value="Food Court">Food Court</option>
+                        <option value="Coffee Shop">Coffee Shop</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Rating Filter</label>
+                    <select id="ratingFilter">
+                        <option value="all">All Ratings</option>
+                        <option value="Excellent">Excellent</option>
+                        <option value="Good">Good</option>
+                        <option value="Average">Average</option>
+                        <option value="Poor">Poor</option>
+                        <option value="Very Poor">Very Poor</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <button class="btn btn-primary" onclick="applyFilters()">🔍 Apply Filters</button>
+                </div>
+                <div class="control-group">
+                    <button class="btn btn-success" onclick="exportToExcel()">📥 Export to Excel</button>
+                </div>
+            </div>
+        </div>
 
-    <div class="controls">
-        <div class="control-group">
-            <button class="btn btn-success" onclick="exportToExcel()">📥 Export to Excel</button>
+        <div class="stats-grid" id="statsGrid">
+            <!-- Stats will be populated by JavaScript -->
+        </div>
+
+        <div class="analytics-section">
+            <h2>📈 Feedback Distribution</h2>
+            <div class="distribution-bar" id="distributionBar"></div>
+            <div class="chart-container">
+                <canvas id="feedbackChart"></canvas>
+            </div>
+        </div>
+
+        <div class="feedback-table">
+            <h2>💬 Recent Feedback with Comments (Latest 50)</h2>
+            <table id="feedbackTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Rating</th>
+                        <th>Feedback</th>
+                        <th>Comment</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody id="feedbackBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">📊 Total Responses</div>
-            <div class="stat-value" id="totalResponses">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">💬 Comments Received</div>
-            <div class="stat-value" id="totalComments">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">😡 Very Poor</div>
-            <div class="stat-value" id="veryPoorCount">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">☹️ Poor</div>
-            <div class="stat-value" id="poorCount">0</div>
-        </div>
-    </div>
-
-    <div class="data-table">
-        <h3>📝 Recent Feedback with Comments (Latest 50)</h3>
-        <div id="tableContent"></div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const supabaseUrl = 'https://czkpqezqiusexllxwyuw.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6a3BxZXpxaXVzZXhsbHh3eXV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNjM2ODEsImV4cCI6MjA4NTgzOTY4MX0.DQYOB9t73E00U2Y8DVG7j-zbfXyEH7Ew4J3Dk1b2EFI';
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        // Sample data - replace with your actual data source
+        let feedbackData = [
+            { date: '2026-02-10', day: 'Tuesday', time: '14:30', rating: 'Good', comment: 'Great variety today!', location: 'Main Cafeteria' },
+            { date: '2026-02-10', day: 'Tuesday', time: '13:45', rating: 'Excellent', comment: 'Best meal this week', location: 'Main Cafeteria' },
+            { date: '2026-02-10', day: 'Tuesday', time: '12:20', rating: 'Average', comment: '', location: 'Main Cafeteria' },
+            { date: '2026-02-10', day: 'Tuesday', time: '11:50', rating: 'Poor', comment: 'Food was cold', location: 'Food Court' },
+            { date: '2026-02-09', day: 'Monday', time: '14:15', rating: 'Average', comment: '', location: 'Main Cafeteria' },
+            { date: '2026-02-09', day: 'Monday', time: '13:30', rating: 'Poor', comment: 'No comment provided', location: 'Main Cafeteria' },
+            { date: '2026-02-09', day: 'Monday', time: '12:45', rating: 'Very Poor', comment: 'Long waiting time', location: 'Main Cafeteria' },
+            { date: '2026-02-09', day: 'Monday', time: '12:15', rating: 'Very Poor', comment: 'Quality needs improvement', location: 'Main Cafeteria' },
+            { date: '2026-02-09', day: 'Monday', time: '11:30', rating: 'Good', comment: 'Fresh ingredients', location: 'Main Cafeteria' },
+            { date: '2026-02-09', day: 'Monday', time: '11:00', rating: 'Average', comment: 'No comment provided', location: 'Main Cafeteria' },
+            { date: '2026-02-09', day: 'Monday', time: '10:30', rating: 'Good', comment: 'Quick service', location: 'Coffee Shop' },
+            { date: '2026-02-08', day: 'Sunday', time: '13:00', rating: 'Excellent', comment: 'Amazing Sunday special', location: 'Main Cafeteria' },
+            { date: '2026-02-08', day: 'Sunday', time: '12:30', rating: 'Good', comment: 'Good portion sizes', location: 'Main Cafeteria' },
+            { date: '2026-02-07', day: 'Saturday', time: '14:00', rating: 'Average', comment: 'Could be better', location: 'Food Court' },
+            { date: '2026-02-07', day: 'Saturday', time: '13:15', rating: 'Poor', comment: 'Limited vegetarian options', location: 'Main Cafeteria' },
+            { date: '2026-02-06', day: 'Friday', time: '12:00', rating: 'Excellent', comment: 'Friday special was perfect!', location: 'Main Cafeteria' },
+            { date: '2026-02-06', day: 'Friday', time: '11:45', rating: 'Good', comment: 'Clean and hygienic', location: 'Main Cafeteria' },
+            { date: '2026-02-05', day: 'Thursday', time: '13:30', rating: 'Average', comment: '', location: 'Main Cafeteria' },
+            { date: '2026-02-05', day: 'Thursday', time: '12:45', rating: 'Very Poor', comment: 'Staff was rude', location: 'Food Court' },
+            { date: '2026-02-04', day: 'Wednesday', time: '14:00', rating: 'Good', comment: 'Good value for money', location: 'Main Cafeteria' },
+            { date: '2026-02-04', day: 'Wednesday', time: '11:30', rating: 'Excellent', comment: 'Best coffee in town!', location: 'Coffee Shop' }
+        ];
 
-        let allFeedbackData = [];
+        let filteredData = [...feedbackData];
 
-        async function loadData() {
-            try {
-                const { data, error } = await _supabase
-                    .from('feedback')
-                    .select('*')
-                    .order('id', { ascending: false });
+        const ratingEmojis = {
+            'Excellent': '😄',
+            'Good': '😊',
+            'Average': '😐',
+            'Poor': '😕',
+            'Very Poor': '😠'
+        };
 
-                if (error) throw error;
+        function initializeDates() {
+            const today = new Date();
+            const weekAgo = new Date(today);
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            
+            document.getElementById('toDate').valueAsDate = today;
+            document.getElementById('fromDate').valueAsDate = weekAgo;
+        }
 
-                allFeedbackData = data || [];
-                updateDashboard();
-            } catch (error) {
-                console.error('Error loading data:', error);
+        function calculateStats(data) {
+            const stats = {
+                total: data.length,
+                withComments: data.filter(d => d.comment && d.comment !== 'No comment provided').length,
+                veryPoor: data.filter(d => d.rating === 'Very Poor').length,
+                poor: data.filter(d => d.rating === 'Poor').length,
+                average: data.filter(d => d.rating === 'Average').length,
+                good: data.filter(d => d.rating === 'Good').length,
+                excellent: data.filter(d => d.rating === 'Excellent').length
+            };
+            return stats;
+        }
+
+        function renderStats(stats) {
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = `
+                <div class="stat-card total">
+                    <div class="stat-card-header">📊 Total Responses</div>
+                    <div class="stat-card-value">${stats.total}</div>
+                    <div class="trend-indicator trend-up">↑ Live updates</div>
+                </div>
+                <div class="stat-card comments">
+                    <div class="stat-card-header">💬 Comments Received</div>
+                    <div class="stat-card-value">${stats.withComments}</div>
+                    <div class="trend-indicator">${Math.round((stats.withComments/stats.total)*100)}% response rate</div>
+                </div>
+                <div class="stat-card very-poor">
+                    <div class="stat-card-header">😠 Very Poor</div>
+                    <div class="stat-card-value">${stats.veryPoor}</div>
+                    <div class="trend-indicator">${Math.round((stats.veryPoor/stats.total)*100)}%</div>
+                </div>
+                <div class="stat-card poor">
+                    <div class="stat-card-header">😕 Poor</div>
+                    <div class="stat-card-value">${stats.poor}</div>
+                    <div class="trend-indicator">${Math.round((stats.poor/stats.total)*100)}%</div>
+                </div>
+                <div class="stat-card average">
+                    <div class="stat-card-header">😐 Average</div>
+                    <div class="stat-card-value">${stats.average}</div>
+                    <div class="trend-indicator">${Math.round((stats.average/stats.total)*100)}%</div>
+                </div>
+                <div class="stat-card good">
+                    <div class="stat-card-header">😊 Good</div>
+                    <div class="stat-card-value">${stats.good}</div>
+                    <div class="trend-indicator">${Math.round((stats.good/stats.total)*100)}%</div>
+                </div>
+                <div class="stat-card excellent">
+                    <div class="stat-card-header">😄 Excellent</div>
+                    <div class="stat-card-value">${stats.excellent}</div>
+                    <div class="trend-indicator">${Math.round((stats.excellent/stats.total)*100)}%</div>
+                </div>
+            `;
+        }
+
+        function renderDistributionBar(stats) {
+            const total = stats.total;
+            const bar = document.getElementById('distributionBar');
+            
+            const segments = [
+                { rating: 'Excellent', count: stats.excellent, class: 'segment-excellent' },
+                { rating: 'Good', count: stats.good, class: 'segment-good' },
+                { rating: 'Average', count: stats.average, class: 'segment-average' },
+                { rating: 'Poor', count: stats.poor, class: 'segment-poor' },
+                { rating: 'Very Poor', count: stats.veryPoor, class: 'segment-very-poor' }
+            ];
+
+            bar.innerHTML = segments
+                .filter(s => s.count > 0)
+                .map(s => {
+                    const percentage = (s.count / total * 100).toFixed(1);
+                    return `<div class="distribution-segment ${s.class}" style="width: ${percentage}%">${s.rating}: ${s.count} (${percentage}%)</div>`;
+                })
+                .join('');
+        }
+
+        let feedbackChart = null;
+
+        function renderChart(stats) {
+            const ctx = document.getElementById('feedbackChart').getContext('2d');
+            
+            if (feedbackChart) {
+                feedbackChart.destroy();
             }
+
+            feedbackChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Excellent', 'Good', 'Average', 'Poor', 'Very Poor'],
+                    datasets: [{
+                        label: 'Number of Responses',
+                        data: [stats.excellent, stats.good, stats.average, stats.poor, stats.veryPoor],
+                        backgroundColor: [
+                            '#38b2ac',
+                            '#48bb78',
+                            '#ecc94b',
+                            '#ed8936',
+                            '#f56565'
+                        ],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            padding: 12,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('feedbackBody');
+            tbody.innerHTML = data.slice(0, 50).map(item => `
+                <tr>
+                    <td>${item.date}</td>
+                    <td>${item.day}</td>
+                    <td>${item.time}</td>
+                    <td class="rating-emoji">${ratingEmojis[item.rating]}</td>
+                    <td><span class="badge badge-${item.rating.toLowerCase().replace(' ', '-')}">${item.rating}</span></td>
+                    <td>${item.comment ? item.comment : '<span class="no-comment">No comment provided</span>'}</td>
+                    <td>${item.location}</td>
+                </tr>
+            `).join('');
+        }
+
+        function applyFilters() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            const location = document.getElementById('locationFilter').value;
+            const rating = document.getElementById('ratingFilter').value;
+
+            filteredData = feedbackData.filter(item => {
+                let matches = true;
+                
+                if (fromDate && item.date < fromDate) matches = false;
+                if (toDate && item.date > toDate) matches = false;
+                if (location !== 'all' && item.location !== location) matches = false;
+                if (rating !== 'all' && item.rating !== rating) matches = false;
+                
+                return matches;
+            });
+
+            updateDashboard();
         }
 
         function updateDashboard() {
-            updateStats();
-            updateTable();
-        }
-
-        function updateStats() {
-            const total = allFeedbackData.length;
-            const comments = allFeedbackData.filter(f => f.comment && f.comment.trim()).length;
-            const veryPoor = allFeedbackData.filter(f => f.rating === 1).length;
-            const poor = allFeedbackData.filter(f => f.rating === 2).length;
-
-            document.getElementById('totalResponses').textContent = total;
-            document.getElementById('totalComments').textContent = comments;
-            document.getElementById('veryPoorCount').textContent = veryPoor;
-            document.getElementById('poorCount').textContent = poor;
-        }
-
-        function updateTable() {
-            const tableContent = document.getElementById('tableContent');
-            
-            if (allFeedbackData.length === 0) {
-                tableContent.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">No feedback data available</p>';
-                return;
-            }
-
-            const recentData = allFeedbackData.slice(0, 50);
-            const emojiMap = {
-                1: '😡',
-                2: '☹️',
-                3: '😐',
-                4: '😊',
-                5: '😁'
-            };
-
-            let tableHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Day</th>
-                            <th>Rating</th>
-                            <th>Feedback</th>
-                            <th>Comment</th>
-                            <th>Location</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            recentData.forEach(item => {
-                const hasComment = item.comment && item.comment.trim();
-                tableHTML += `
-                    <tr>
-                        <td>${item.date || 'N/A'}</td>
-                        <td>${item.dayofweek || 'N/A'}</td>
-                        <td class="emoji-display">${emojiMap[item.rating]}</td>
-                        <td>${item.label}</td>
-                        <td class="comment-cell" title="${hasComment ? item.comment : 'No comment'}">
-                            ${hasComment ? 
-                                `<span class="comment-badge">💬</span> ${item.comment}` : 
-                                '<span style="color:#999;">-</span>'}
-                        </td>
-                        <td>${item.location || 'N/A'}</td>
-                    </tr>
-                `;
-            });
-
-            tableHTML += '</tbody></table>';
-            tableContent.innerHTML = tableHTML;
+            const stats = calculateStats(filteredData);
+            renderStats(stats);
+            renderDistributionBar(stats);
+            renderChart(stats);
+            renderTable(filteredData);
         }
 
         function exportToExcel() {
-            if (allFeedbackData.length === 0) {
-                alert('No data to export');
-                return;
-            }
-
-            let csv = 'Date,Day,Rating,Feedback,Comment,Location\n';
+            const stats = calculateStats(filteredData);
             
-            allFeedbackData.forEach(item => {
-                const comment = (item.comment || '').replace(/"/g, '""'); // Escape quotes
-                csv += `"${item.date}","${item.dayofweek}",${item.rating},"${item.label}","${comment}","${item.location}"\n`;
+            let csvContent = "Cafeteria Feedback Dashboard Report\n\n";
+            csvContent += "Summary Statistics\n";
+            csvContent += "Total Responses," + stats.total + "\n";
+            csvContent += "Comments Received," + stats.withComments + "\n";
+            csvContent += "Excellent," + stats.excellent + "\n";
+            csvContent += "Good," + stats.good + "\n";
+            csvContent += "Average," + stats.average + "\n";
+            csvContent += "Poor," + stats.poor + "\n";
+            csvContent += "Very Poor," + stats.veryPoor + "\n\n";
+            
+            csvContent += "Detailed Feedback\n";
+            csvContent += "Date,Day,Time,Rating,Feedback,Comment,Location\n";
+            
+            filteredData.forEach(item => {
+                csvContent += `${item.date},${item.day},${item.time},${item.rating},${item.rating},"${item.comment}",${item.location}\n`;
             });
 
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `cafeteria_feedback_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'cafeteria_feedback_' + new Date().toISOString().split('T')[0] + '.csv');
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
-        // Initialize and auto-refresh
-        loadData();
-        setInterval(loadData, 30000); // Refresh every 30 seconds
+        // Initialize dashboard
+        initializeDates();
+        updateDashboard();
+
+        // Simulate real-time updates (optional - remove if you don't need this)
+        setInterval(() => {
+            // This would be replaced with actual data fetching in production
+            const randomRating = ['Excellent', 'Good', 'Average', 'Poor', 'Very Poor'][Math.floor(Math.random() * 5)];
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            
+            // Only add if showing current date
+            const toDate = document.getElementById('toDate').value;
+            if (toDate === now.toISOString().split('T')[0]) {
+                // Uncomment to enable real-time additions
+                // feedbackData.unshift({
+                //     date: now.toISOString().split('T')[0],
+                //     day: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()],
+                //     time: timeStr,
+                //     rating: randomRating,
+                //     comment: Math.random() > 0.5 ? 'Sample comment' : '',
+                //     location: 'Main Cafeteria'
+                // });
+                // applyFilters();
+            }
+        }, 30000); // Check every 30 seconds
     </script>
 </body>
 </html>
