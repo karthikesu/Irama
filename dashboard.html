@@ -23,6 +23,29 @@
             margin: 0 auto;
         }
 
+        .back-button {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background: #f7fafc;
+        }
+
         .header {
             background: white;
             border-radius: 15px;
@@ -314,7 +337,7 @@
             body {
                 background: white;
             }
-            .controls {
+            .controls, .back-button {
                 display: none;
             }
         }
@@ -322,6 +345,10 @@
 </head>
 <body>
     <div class="container">
+        <button class="back-button" onclick="window.location.href='index.html'">
+            ← Back to Home
+        </button>
+
         <div class="header">
             <h1>
                 📊 Cafeteria Feedback Dashboard
@@ -665,29 +692,6 @@
         // Initialize dashboard
         initializeDates();
         updateDashboard();
-
-        // Simulate real-time updates (optional - remove if you don't need this)
-        setInterval(() => {
-            // This would be replaced with actual data fetching in production
-            const randomRating = ['Excellent', 'Good', 'Average', 'Poor', 'Very Poor'][Math.floor(Math.random() * 5)];
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-            
-            // Only add if showing current date
-            const toDate = document.getElementById('toDate').value;
-            if (toDate === now.toISOString().split('T')[0]) {
-                // Uncomment to enable real-time additions
-                // feedbackData.unshift({
-                //     date: now.toISOString().split('T')[0],
-                //     day: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()],
-                //     time: timeStr,
-                //     rating: randomRating,
-                //     comment: Math.random() > 0.5 ? 'Sample comment' : '',
-                //     location: 'Main Cafeteria'
-                // });
-                // applyFilters();
-            }
-        }, 30000); // Check every 30 seconds
     </script>
 </body>
 </html>
