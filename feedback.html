@@ -497,8 +497,24 @@
                 comments: comments
             };
 
-            // Here you would send the feedback to your backend
-            console.log('Feedback submitted:', feedback);
+            // Save to localStorage so dashboard can read it
+            const allFeedback = JSON.parse(localStorage.getItem('cafeteriaFeedback') || '[]');
+            const now2 = new Date();
+            const saveData = {
+                date: now2.toISOString().split('T')[0],
+                day: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now2.getDay()],
+                time: now2.getHours().toString().padStart(2,'0') + ':' + now2.getMinutes().toString().padStart(2,'0'),
+                mealPeriod: document.getElementById('mealPeriod').textContent.replace(/[🌅🌞🌆🌙]/g,'').trim(),
+                rating: ratings.food,
+                foodRating: ratings.food,
+                serviceRating: ratings.service,
+                ambianceRating: ratings.ambiance,
+                comment: comments || 'No comment provided',
+                location: 'Main Cafeteria'
+            };
+            allFeedback.unshift(saveData);
+            localStorage.setItem('cafeteriaFeedback', JSON.stringify(allFeedback));
+            console.log('Feedback saved:', saveData);
 
             // Show thank you message
             document.querySelector('.form-content').classList.add('hide');
