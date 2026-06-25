@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRAMA Housekeeping System</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0d0d0f;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    width: 100%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 18px;
+    padding: 40px 32px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .lock {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 24px;
+  }
+  h1 { color: #f4e4b8; font-size: 19px; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.3px; }
+  .sub { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 28px; }
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(212,175,55,0.3);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 14px;
+    outline: none;
+  }
+  input::placeholder { color: rgba(255,255,255,0.35); }
+  input:focus { border-color: #d4af37; }
+  button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #d4af37, #b8932c);
+    color: #0d0d0f;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.92; }
+  .error { color: #ff6b6b; font-size: 12px; margin-top: 12px; height: 14px; }
+  .footer { color: rgba(255,255,255,0.3); font-size: 11px; margin-top: 24px; }
+  #unlocked { display: none; }
+  #unlocked p { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.6; margin-top: 10px; }
+  .check {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(80,200,120,0.12); border: 1px solid rgba(80,200,120,0.4);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; font-size: 24px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div id="locked">
+      <div class="lock">🔒</div>
+      <h1>IRAMA Housekeeping System</h1>
+      <p class="sub">Enter password to continue</p>
+      <input type="password" id="pw" placeholder="Password" autocomplete="off" />
+      <button onclick="checkPw()">Unlock</button>
+      <p class="error" id="err"></p>
+    </div>
+    <div id="unlocked">
+      <div class="check">✓</div>
+      <h1>Access granted</h1>
+      <p>The full dashboard is still in development.<br>Check back soon for live housekeeping operations data.</p>
+    </div>
+    <p class="footer">IRAMA Hotel Kuala Lumpur · Internal System</p>
+  </div>
+<script>
+function checkPw() {
+  var pw = document.getElementById('pw').value;
+  if (pw === 'irama2026') {
+    document.getElementById('locked').style.display = 'none';
+    document.getElementById('unlocked').style.display = 'block';
+  } else {
+    document.getElementById('err').textContent = 'Incorrect password';
+  }
+}
+document.getElementById('pw').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkPw();
+});
+</script>
+</body>
+</html>
